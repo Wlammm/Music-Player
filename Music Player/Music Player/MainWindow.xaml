@@ -10,29 +10,33 @@
 
     <Grid Background="LightGray">
         <Grid Height= "50" VerticalAlignment="Top" Background="#FF3C4345">
-            <TextBlock Text="Search:" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18" Foreground="#FFFF" Margin="80 0"/>
-            <TextBox VerticalAlignment="Center" Margin="150,12,750,12" Height="26" Foreground="White" Background="#FF20292B"/>
+            <TextBlock Text="Search:" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18" Foreground="#FFFF" Margin="20 0"/>
+            <TextBox VerticalAlignment="Center" Margin="90,12,750,12" Height="26" Foreground="White" Background="#FF20292B"/>
         </Grid>
         <Grid Height ="80" VerticalAlignment="Bottom" Background="#FF3C4345">
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="1:23" Margin="220 40 0 0" Foreground="White"/>
-            <Slider Width="600" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="260,45,0,0" Height="25" Maximum="100"/>
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="4:20" Margin="880 40 0 0" Foreground="White"/>
+            <TextBlock x:Name="txtCurrentTime" VerticalAlignment="Center" HorizontalAlignment="Left" Text="1:23" Margin="220 40 0 0" Foreground="White"/>
+            <Slider x:Name="sldrTimeline" Width="600" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="260,45,0,0" Height="25" Maximum="100" DragOver="Timeline_Clicked"/>
+            <TextBlock x:Name="txtMaxTime" VerticalAlignment="Center" HorizontalAlignment="Left" Text="4:20" Margin="880 40 0 0" Foreground="White"/>
 
-            <Slider Width="200" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="260 0 0 30"/>
+            <Slider x:Name="sldrVolume" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="260 0 0 30" Maximum="1" Minimum="0" LargeChange="0.1" SmallChange="0.05" ValueChanged="Volume_Changed"/>
             <TextBlock Height="20" HorizontalAlignment="Left" Text="Currently Playing: " Margin="490,0,0,30" Foreground="#FF20292B"/>
-            <TextBlock Height="20" HorizontalAlignment="Left" Text="Yikes - Yikesmeistro " Margin="590,0,0,30" Foreground="White" FontStyle="Normal"/>
+            <TextBlock x:Name="txtSongTitle" Height="20" HorizontalAlignment="Left" Text="Yikes - Yikesmeistro " Margin="590,0,0,30" Foreground="White" FontStyle="Normal"/>
             <materialDesign:PackIcon Kind="VolumeHigh" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" Width="20" Margin="460 0 0 30" Foreground="#FF20292B"/>
             <materialDesign:PackIcon Kind="VolumeLow" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" Width="20" Margin="240 0 0 30" Foreground="#FF20292B"/>
 
-            <Button Width="50" Height="50" VerticalAlignment="Center" Margin="900 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C">
+            <Button x:Name ="btnPlay"  Width="50" Height="50" VerticalAlignment="Center" Margin="900 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C" Click="ButtonPlay_Click">
                 <materialDesign:PackIcon Kind="Play" Width="30" Height="30" HorizontalAlignment="Center"/>
             </Button>
 
-            <Button Width="50" Height="50" VerticalAlignment="Center" Margin="800 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C">
+            <Button x:Name="btnPause" Width="50" Height="50" VerticalAlignment="Center" Margin="900 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C" Click="ButtonPause_Click" Visibility="Collapsed">
+                <materialDesign:PackIcon Kind="Pause" Width="30" Height="30" HorizontalAlignment="Center"/>
+            </Button>
+
+            <Button Width="50" Height="50" VerticalAlignment="Center" Margin="800 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C" Click="ButtonPrevious_Click">
                 <materialDesign:PackIcon Kind="SkipPrevious" Width="30" Height="30" HorizontalAlignment="Center"/>
             </Button>
 
-            <Button Width="50" Height="50" VerticalAlignment="Center" Margin="1000 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C">
+            <Button Width="50" Height="50" VerticalAlignment="Center" Margin="1000 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C" Click="ButtonNext_Click">
                 <materialDesign:PackIcon Kind="SkipNext" Width="30" Height="30" HorizontalAlignment="Center"/>
             </Button>
 
@@ -79,6 +83,7 @@
                 </ListView>
             </StackPanel>
         </Grid>
+        <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="444,108,0,0" Height="108" Click="SelectSong_Click"/>
 
     </Grid>
 </Window>
