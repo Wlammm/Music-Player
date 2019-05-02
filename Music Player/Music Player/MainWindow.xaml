@@ -15,7 +15,7 @@
         </Grid>
         <Grid Height ="80" VerticalAlignment="Bottom" Background="#FF3C4345">
             <TextBlock x:Name="txtCurrentTime" VerticalAlignment="Center" HorizontalAlignment="Left" Text="1:23" Margin="220 40 0 0" Foreground="White"/>
-            <Slider x:Name="sldrTimeline" Width="600" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="260,45,0,0" Height="25" Maximum="100" DragOver="Timeline_Clicked"/>
+            <Slider x:Name="sldrTimeline" Width="600" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="260,45,0,0" Height="25" Maximum="100" Thumb.DragCompleted="MyTimeline_DragCompleted" Thumb.DragStarted="MyTimeline_DragStarted"/>
             <TextBlock x:Name="txtMaxTime" VerticalAlignment="Center" HorizontalAlignment="Left" Text="4:20" Margin="880 40 0 0" Foreground="White"/>
 
             <Slider x:Name="sldrVolume" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="260 0 0 30" Maximum="1" Minimum="0" LargeChange="0.1" SmallChange="0.05" ValueChanged="Volume_Changed"/>

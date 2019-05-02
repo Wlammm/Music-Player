@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Media;
 using System.Text;
@@ -15,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Windows.Controls.Primitives;
 
 namespace Music_Player
 {
@@ -31,6 +33,7 @@ namespace Music_Player
         private int maxTimelineValue = 100;
 
         private bool isPaused = true;
+        private bool timelineIsChanging = false;
 
         Song rammstein;
 
@@ -76,7 +79,10 @@ namespace Music_Player
             if (mediaPlayer.Source != null)
             {
                 txtCurrentTime.Text = mediaPlayer.Position.ToString(@"mm\:ss");
-                sldrTimeline.Value = (int)mediaPlayer.Position.TotalSeconds;
+                if (!timelineIsChanging)
+                {
+                    sldrTimeline.Value = (int)mediaPlayer.Position.TotalSeconds;
+                }
             }
         }
 
@@ -96,11 +102,6 @@ namespace Music_Player
             mediaPlayer.Volume = sldrVolume.Value;
         }
 
-        private void Timeline_Clicked(object sender, DragEventArgs e)
-        {
-            
-        }
-
         private void ButtonPlay_Click(object sender, RoutedEventArgs e)
         {
             mediaPlayer.Play();
@@ -115,6 +116,18 @@ namespace Music_Player
             btnPause.Visibility = Visibility.Collapsed;
             btnPlay.Visibility = Visibility.Visible;
             isPaused = true;
+        }
+
+        private void MyTimeline_DragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            TimeSpan newSongPosition = TimeSpan.FromSeconds(Convert.ToInt32(sldrTimeline.Value));
+            mediaPlayer.Position = newSongPosition;
+            timelineIsChanging = false;
+        }
+
+        private void MyTimeline_DragStarted(object sender, DragStartedEventArgs e)
+        {
+            timelineIsChanging = true;
         }
     }
 }
