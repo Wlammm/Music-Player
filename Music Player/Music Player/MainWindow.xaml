@@ -7,55 +7,40 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Music Player" Height="600" Width="1080" ResizeMode="NoResize" WindowStyle="None">
-    <Window.Resources>
-        <Storyboard x:Key="MenuOpen">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
-                <EasingDoubleKeyFrame KeyTime="0" Value="60"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.25" Value="200"/>
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
 
-        <Storyboard x:Key="MenuClose">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
-                <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.25" Value="60"/>
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-
-    </Window.Resources>
-
-    <Window.Triggers>
-        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenMenu">
-            <BeginStoryboard Storyboard="{StaticResource MenuOpen}"/>
-        </EventTrigger>
-
-        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonCloseMenu">
-            <BeginStoryboard Storyboard="{StaticResource MenuClose}"/>
-        </EventTrigger>
-    </Window.Triggers>
-    
     <Grid Background="LightGray">
         <Grid Height= "50" VerticalAlignment="Top" Background="#FF3C4345">
-            <TextBlock Text="Search:" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18" Foreground="#FFFF" Margin="220 0"/>
-            <TextBox HorizontalAlignment="Left" VerticalAlignment="Center" Margin="290 0" Width="150" Height="25" Foreground="White" Background="#FF20292B"/>
+            <TextBlock Text="Search:" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18" Foreground="#FFFF" Margin="80 0"/>
+            <TextBox VerticalAlignment="Center" Margin="150,12,750,12" Height="26" Foreground="White" Background="#FF20292B"/>
         </Grid>
-        <Grid Height ="70" VerticalAlignment="Bottom" Background="#FF3C4345">
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="1:23" Margin="220 0 0 0" Foreground="White"/>
-            <Slider Width="600" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="260,5,0,0" Height="25"/>
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="4:20" Margin="880 0 0 0" Foreground="White"/>
+        <Grid Height ="80" VerticalAlignment="Bottom" Background="#FF3C4345">
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="1:23" Margin="220 40 0 0" Foreground="White"/>
+            <Slider Width="600" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="260,45,0,0" Height="25" Maximum="100"/>
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="4:20" Margin="880 40 0 0" Foreground="White"/>
+
+            <Slider Width="200" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="260 0 0 30"/>
+            <TextBlock Height="20" HorizontalAlignment="Left" Text="Currently Playing: " Margin="490,0,0,30" Foreground="#FF20292B"/>
+            <TextBlock Height="20" HorizontalAlignment="Left" Text="Yikes - Yikesmeistro " Margin="590,0,0,30" Foreground="White" FontStyle="Normal"/>
+            <materialDesign:PackIcon Kind="VolumeHigh" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" Width="20" Margin="460 0 0 30" Foreground="#FF20292B"/>
+            <materialDesign:PackIcon Kind="VolumeLow" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" Width="20" Margin="240 0 0 30" Foreground="#FF20292B"/>
+
+            <Button Width="50" Height="50" VerticalAlignment="Center" Margin="900 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C">
+                <materialDesign:PackIcon Kind="Play" Width="30" Height="30" HorizontalAlignment="Center"/>
+            </Button>
+
+            <Button Width="50" Height="50" VerticalAlignment="Center" Margin="800 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C">
+                <materialDesign:PackIcon Kind="SkipPrevious" Width="30" Height="30" HorizontalAlignment="Center"/>
+            </Button>
+
+            <Button Width="50" Height="50" VerticalAlignment="Center" Margin="1000 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C">
+                <materialDesign:PackIcon Kind="SkipNext" Width="30" Height="30" HorizontalAlignment="Center"/>
+            </Button>
+
         </Grid>
 
-        <Grid x:Name="GridMenu" Width="60" HorizontalAlignment="Left" Background="#FF20292B">
+        <Grid x:Name="GridMenu" Width="200" HorizontalAlignment="Left" Background="#FF20292B" Margin="0 50 0 0">
             <StackPanel>
-                <Grid Height="50" Background="#FFFF">
-                    <Button x:Name="ButtonCloseMenu" Width="60" Height="60" Background="{x:Null}" BorderBrush="{x:Null}"  VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="Collapsed" Click="ButtonCloseMenu_Click">
-                        <materialDesign:PackIcon Foreground="#FF20292B" Kind="ArrowLeft" Width="35" Height="35" />
-                    </Button>
 
-                    <Button x:Name="ButtonOpenMenu" Width="60" Height="60" Background="{x:Null}" BorderBrush="{x:Null}"  VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="Visible" Click="ButtonOpenMenu_Click">
-                        <materialDesign:PackIcon Foreground="#FF20292B" Kind="Menu" Width="35" Height="35"/>
-                    </Button>
-                </Grid>
                 <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="White">
                     <ListViewItem Height="60">
                         <StackPanel Orientation="Horizontal">
