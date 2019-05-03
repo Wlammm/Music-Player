@@ -10,9 +10,6 @@
 
     <Grid Background="LightGray">
 
-
-
-
         <Grid Height= "50" VerticalAlignment="Top" Background="#FF3C4345">
             <TextBlock Text="Search:" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18" Foreground="#FFFF" Margin="20 0"/>
             <TextBox VerticalAlignment="Center" Margin="90,12,750,12" Height="26" Foreground="White" Background="#FF20292B"/>
@@ -49,54 +46,81 @@
         <Grid x:Name="GridMenu" Width="200" HorizontalAlignment="Left" Background="#FF20292B" Margin="0 50 0 0">
             <StackPanel>
                 <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="White">
-                    <ListViewItem Height="60">
+                    
+                    <ListViewItem x:Name="tabAllSongs" Height="60" PreviewMouseDown="AllSongsTab_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Music" Width="25" Height="25" VerticalAlignment="Center" Margin="10"/>
+                            <TextBlock Text="All Songs" VerticalAlignment="Center" Margin="10 10" Width="135"/>
+                        </StackPanel>
+                    </ListViewItem>
+
+                    <ListViewItem x:Name="tabYoutube" Height="60" PreviewMouseDown="YoutubeTab_Click">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Youtube" Width="25" Height="25" VerticalAlignment="Center" Margin="10"/>
-                            <TextBlock Text="Youtube" VerticalAlignment="Center" Margin="10 10"/>
+                            <TextBlock Text="Youtube" VerticalAlignment="Center" Margin="10 10" Width="126"/>
                         </StackPanel>
                     </ListViewItem>
 
-                    <ListViewItem Height="60">
+                    <ListViewItem x:Name="tabLocal" Height="60" PreviewMouseDown="LocalTab_Click">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="FIles" Width="25" Height="25" VerticalAlignment="Center" Margin="10"/>
-                            <TextBlock Text="Local" VerticalAlignment="Center" Margin="10 10"/>
+                            <TextBlock Text="Local" VerticalAlignment="Center" Margin="10 10" Width="130"/>
                         </StackPanel>
                     </ListViewItem>
 
-                    <ListViewItem Height="60">
+                    <ListViewItem x:Name="tabDownloaded" Height="60" PreviewMouseDown="DownloadsTab_Click">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Download" Width="25" Height="25" VerticalAlignment="Center" Margin="10"/>
-                            <TextBlock Text="Downloaded" VerticalAlignment="Center" Margin="10 10"/>
+                            <TextBlock Text="Downloaded" VerticalAlignment="Center" Margin="10 10" Width="124"/>
                         </StackPanel>
                     </ListViewItem>
 
-                    <ListViewItem Height="60">
+                    <ListViewItem x:Name="tabPlaylist" Height="60" PreviewMouseDown="PlaylistTab_Click">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="FormatListBulleted" Width="25" Height="25" VerticalAlignment="Center" Margin="10"/>
-                            <TextBlock Text="Playlists" VerticalAlignment="Center" Margin="10 10"/>
+                            <TextBlock Text="Playlists" VerticalAlignment="Center" Margin="10 10" Width="124"/>
                         </StackPanel>
                     </ListViewItem>
 
-                    <ListViewItem Height="60">
+
+                    <ListViewItem x:Name="tabSettings" Height="60" PreviewMouseDown="SettingsTab_Click">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Settings" Width="25" Height="25" VerticalAlignment="Center" Margin="10"/>
-                            <TextBlock Text="Settings" VerticalAlignment="Center" Margin="10 10"/>
+                            <TextBlock Text="Settings" VerticalAlignment="Center" Margin="10 10" Width="127"/>
                         </StackPanel>
                     </ListViewItem>
                 </ListView>
             </StackPanel>
         </Grid>
-        <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,482,0,0" Height="108" Click="SelectSong_Click"/>
+        <Button Content="Add local songs" HorizontalAlignment="Left" VerticalAlignment="Top" Width="185" Margin="10,482,0,0" Height="108" Click="SelectSong_Click"/>
 
-        <Grid x:Name="LocalGrid" Height="470" Margin="200,50,0,0" VerticalAlignment="Top" Width="880" Background="Gray">
-            <StackPanel x:Name="pnlSongList">
-                <Button Height="25" VerticalAlignment="Top" Width="880">
-                    <TextBlock Text="Yikes" Width="880" HorizontalAlignment="Left"/>
-                </Button>
-                
-            </StackPanel>
-
+        <Grid x:Name="AllSongsGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="880" Height="470" Margin="200,50,0,0" Background="Gray" Visibility="Collapsed">
+            <TextBlock Text="All Songs Tab - Not implemeneted!" Foreground="White" FontSize="22" FontWeight="bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
+
+        <Grid x:Name="YoutubeGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="880" Height="470" Margin="200,50,0,0" Background="Gray" Visibility="Visible">
+            <TextBlock Text="Youtube Tab - Not implemeneted!" Foreground="White" FontSize="22" FontWeight="bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Grid x:Name="LocalGrid" Height="470" Margin="200,50,0,0" VerticalAlignment="Top" Width="880" Background="Gray" Visibility="Collapsed">
+
+            <StackPanel x:Name="pnlSongList" VerticalAlignment="Top">
+
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="DownloadsGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="880" Height="470" Margin="200,50,0,0" Background="Gray" Visibility="Collapsed">
+            <TextBlock Text="Downloaded Tab - Not implemeneted!" Foreground="White" FontSize="22" FontWeight="bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Grid x:Name="PlaylistsGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="880" Height="470" Margin="200,50,0,0" Background="Gray" Visibility="Collapsed">
+            <TextBlock Text="Playlists Tab - Not implemeneted!" Foreground="White" FontSize="22" FontWeight="bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Grid x:Name="SettingsGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="880" Height="470" Margin="200,50,0,0" Background="Gray" Visibility="Collapsed">
+            <TextBlock Text="Settings Tab - Not implemeneted!" Foreground="White" FontSize="22" FontWeight="bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+
 
     </Grid>
 </Window>

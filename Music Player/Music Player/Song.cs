@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 namespace Music_Player
 {
-    class Song
+    public class Song
     {
         private string myName = "";
         public string GetName
