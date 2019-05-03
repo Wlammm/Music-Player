@@ -9,6 +9,10 @@
         Title="Music Player" Height="600" Width="1080" ResizeMode="NoResize" WindowStyle="None">
 
     <Grid Background="LightGray">
+
+
+
+
         <Grid Height= "50" VerticalAlignment="Top" Background="#FF3C4345">
             <TextBlock Text="Search:" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18" Foreground="#FFFF" Margin="20 0"/>
             <TextBox VerticalAlignment="Center" Margin="90,12,750,12" Height="26" Foreground="White" Background="#FF20292B"/>
@@ -44,7 +48,6 @@
 
         <Grid x:Name="GridMenu" Width="200" HorizontalAlignment="Left" Background="#FF20292B" Margin="0 50 0 0">
             <StackPanel>
-
                 <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="White">
                     <ListViewItem Height="60">
                         <StackPanel Orientation="Horizontal">
@@ -83,7 +86,17 @@
                 </ListView>
             </StackPanel>
         </Grid>
-        <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="444,108,0,0" Height="108" Click="SelectSong_Click"/>
+        <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,482,0,0" Height="108" Click="SelectSong_Click"/>
+
+        <Grid x:Name="LocalGrid" Height="470" Margin="200,50,0,0" VerticalAlignment="Top" Width="880" Background="Gray">
+            <StackPanel x:Name="pnlSongList">
+                <Button Height="25" VerticalAlignment="Top" Width="880">
+                    <TextBlock Text="Yikes" Width="880" HorizontalAlignment="Left"/>
+                </Button>
+                
+            </StackPanel>
+
+        </Grid>
 
     </Grid>
 </Window>

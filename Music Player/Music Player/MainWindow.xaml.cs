@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Windows.Controls.Primitives;
+using System.IO;
 
 namespace Music_Player
 {
@@ -25,8 +26,6 @@ namespace Music_Player
     /// </summary>
     public partial class MainWindow : Window
     {
-        string filePath = "C:/Users/William Arnback/Desktop/Rammstein - Du Hast (Official Video).mp3";
-
         private MediaPlayer mediaPlayer = new MediaPlayer();
 
         private int currentTimelineValue = 0;
@@ -35,15 +34,26 @@ namespace Music_Player
         private bool isPaused = true;
         private bool timelineIsChanging = false;
 
-        Song rammstein;
+        private string myAppdataFolder;
+        private string myLocalFolder;
+
+        Song currentSong;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            string appdata= Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            myAppdataFolder = System.IO.Path.Combine(appdata, ".MusicPlayer");
+            myLocalFolder = System.IO.Path.Combine(myAppdataFolder, "Music", "Local/");
+            if (!Directory.Exists(myLocalFolder))
+            {
+                Directory.CreateDirectory(myLocalFolder);
+            }
+
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += timer_Tick;
+            timer.Tick += Timer_Tick;
             timer.Start();
             mediaPlayer.MediaOpened += MediaOpened;
         }
@@ -56,7 +66,7 @@ namespace Music_Player
             sldrTimeline.Minimum = 0;
             sldrTimeline.Maximum = maxTimelineValue;
             txtMaxTime.Text = mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss");
-            txtSongTitle.Text = rammstein.GetName;
+            txtSongTitle.Text = currentSong.GetName;
 
             if (!isPaused)
             {
@@ -74,7 +84,7 @@ namespace Music_Player
 
         }
 
-        void timer_Tick(object sender, EventArgs e)
+        void Timer_Tick(object sender, EventArgs e)
         {
             if (mediaPlayer.Source != null)
             {
@@ -88,13 +98,33 @@ namespace Music_Player
 
         private void SelectSong_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "MP3 files (*.mp3)|*.mp3|All files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() == true)
+            currentSong = ImportFiles();
+
+            mediaPlayer.Open(currentSong.GetUri);
+        }
+
+        /// <summary>
+        /// Opens a FileDialog and imports songs to music player.
+        /// </summary>
+        Song ImportFiles()
+        {
+            OpenFileDialog tempFileDialog = new OpenFileDialog();
+            tempFileDialog.Filter = "MP3 files (*.mp3)|*.mp3| All files (*.*)|*.*";
+            tempFileDialog.Multiselect = true;
+
+            if(tempFileDialog.ShowDialog() == true)
             {
-                rammstein = new Song(openFileDialog.FileName);
-                mediaPlayer.Open(rammstein.GetUri);
+                // Copying selected files to local folder (%appdata%/.MusicPlayer/Music/Local)
+                for(int i = 0; i < tempFileDialog.FileNames.Length; i++)
+                {
+                    string tempSourceFilePath = tempFileDialog.FileNames[i];
+                    string tempNewFilePath = myLocalFolder + System.IO.Path.GetFileName(tempSourceFilePath);
+
+                    File.Copy(tempSourceFilePath, tempNewFilePath, true);
+                }
             }
+
+            return new Song(tempFileDialog.FileNames.Last());
         }
 
         private void Volume_Changed(object sender, RoutedPropertyChangedEventArgs<double> e)
