@@ -26,15 +26,17 @@ namespace Music_Player
 
         private string myAppdataFolder;
         private string myLocalFolder;
+        private string myPlaylistsFolder;
 
         Song currentSong;
         TimeSpan currentSongDuration;
+        Playlist myPlaylist;
 
         DiscordRpcClient client;
 
         private enum Tab { AllSongs, Youtube, Local, Downloads, Playlists, Settings };
         private Tab myActiveTab = Tab.AllSongs;
-        private Dictionary<Tab, Grid> myTabs;
+        private Dictionary<Tab, TabPanel> myTabs;
 
         public MainWindow()
         {
@@ -49,12 +51,20 @@ namespace Music_Player
             string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             myAppdataFolder = System.IO.Path.Combine(appdata, ".MusicPlayer");
             myLocalFolder = System.IO.Path.Combine(myAppdataFolder, "Music", "Local/");
+            myPlaylistsFolder = System.IO.Path.Combine(myAppdataFolder, "Playlists");
 
             // Creating new file paths.
             if (!Directory.Exists(myLocalFolder))
             {
                 Directory.CreateDirectory(myLocalFolder);
             }
+
+            if (!Directory.Exists(myPlaylistsFolder))
+            {
+                Directory.CreateDirectory(myPlaylistsFolder);
+            }
+
+            myPlaylist = new Playlist("TestPlaylist", myPlaylistsFolder);
 
             // Adding timeline timer.
             DispatcherTimer timer = new DispatcherTimer();
@@ -65,21 +75,53 @@ namespace Music_Player
             // Subscribing to event.
             mediaPlayer.MediaOpened += MediaOpened;
 
-            myTabs = new Dictionary<Tab, Grid>
+            myTabs = new Dictionary<Tab, TabPanel>
             {
-                {Tab.AllSongs, AllSongsGrid },
-                {Tab.Youtube, YoutubeGrid },
-                {Tab.Local, LocalGrid },
-                {Tab.Downloads, DownloadsGrid },
-                {Tab.Playlists, PlaylistsGrid },
-                {Tab.Settings, SettingsGrid }
+                {Tab.AllSongs, new TabPanel(AllSongsGrid) },
+                {Tab.Youtube, new TabPanel(YoutubeGrid) },
+                {Tab.Local, new TabPanel(LocalGrid, btnAddSongsLocal) },
+                {Tab.Downloads, new TabPanel(DownloadsGrid) },
+                {Tab.Playlists, new TabPanel(PlaylistsGrid) },
+                {Tab.Settings, new TabPanel(SettingsGrid) }
             };
+
+            GetLocalSongs();
+        }
+
+        /// <summary>
+        /// Loads all local songs from folder.
+        /// </summary>
+        private void GetLocalSongs()
+        {
+            string[] filePaths = Directory.GetFiles(myLocalFolder);
+
+            for(int i = 0; i < filePaths.Length; i++)
+            {
+                new SongButton(new Song(filePaths[i]), pnlSongList, this);
+            }
         }
 
         public void PlaySong(Song aSong)
         {
             currentSong = aSong;
-            mediaPlayer.Open(aSong.GetUri);
+            mediaPlayer.Open(aSong.GetUri());
+        }
+
+        void SetPaused(bool pause)
+        {
+            isPaused = pause;
+
+            if (pause)
+            {
+                mediaPlayer.Pause();
+                btnPause.Visibility = Visibility.Collapsed;
+                btnPlay.Visibility = Visibility.Visible;
+                return;
+            }
+
+            mediaPlayer.Play();
+            btnPause.Visibility = Visibility.Visible;
+            btnPlay.Visibility = Visibility.Collapsed;
         }
 
         private void MediaOpened(object sender, EventArgs e)
@@ -97,10 +139,8 @@ namespace Music_Player
 
             currentSongDuration = mediaPlayer.NaturalDuration.TimeSpan;
 
-            if (!isPaused)
-            {
-                mediaPlayer.Play();
-            }
+            SetPaused(false);
+            mediaPlayer.Play();
         }
 
         void DiscordRPC()
@@ -145,15 +185,13 @@ namespace Music_Player
 
         private void SelectSong_Click(object sender, RoutedEventArgs e)
         {
-            currentSong = ImportFiles();
-
-            mediaPlayer.Open(currentSong.GetUri);
+            ImportFiles();
         }
 
         /// <summary>
         /// Opens a FileDialog and imports songs to music player.
         /// </summary>
-        Song ImportFiles()
+        void ImportFiles()
         {
             OpenFileDialog tempFileDialog = new OpenFileDialog();
             tempFileDialog.Filter = "MP3 files (*.mp3)|*.mp3| All files (*.*)|*.*";
@@ -169,15 +207,23 @@ namespace Music_Player
 
                     string tempSourceFilePath = tempFileDialog.FileNames[i];
                     string tempNewFilePath = myLocalFolder + System.IO.Path.GetFileName(tempSourceFilePath);
+
+
+                    List<Song> songsAdded = new List<Song>();
+
                     if (!File.Exists(tempNewFilePath))
                     {
                         File.Copy(tempSourceFilePath, tempNewFilePath, false);
+                        Song song = new Song(tempNewFilePath);
+                        SongButton b = new SongButton(song, pnlSongList, this);
+                        songsAdded.Add(song);
                     }
-                    SongButton b = new SongButton(new Song(tempNewFilePath), pnlSongList, this);
+
+                    myPlaylist.AddSongs(songsAdded);
+                    
+                    myPlaylist.ReadPlaylistFile();
                 }
             }
-
-            return new Song(tempFileDialog.FileNames.Last());
         }
 
         private void Volume_Changed(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -187,20 +233,12 @@ namespace Music_Player
 
         private void ButtonPlay_Click(object sender, RoutedEventArgs e)
         {
-            mediaPlayer.Play();
-            btnPause.Visibility = Visibility.Visible;
-            btnPlay.Visibility = Visibility.Collapsed;
-            isPaused = false;
-            DiscordRPC();
+            SetPaused(false);
         }
 
         private void ButtonPause_Click(object sender, RoutedEventArgs e)
         {
-            mediaPlayer.Pause();
-            btnPause.Visibility = Visibility.Collapsed;
-            btnPlay.Visibility = Visibility.Visible;
-            isPaused = true;
-            DiscordRPC();
+            SetPaused(true);
         }
 
         private void MyTimeline_DragCompleted(object sender, DragCompletedEventArgs e)
@@ -218,8 +256,8 @@ namespace Music_Player
 
         private void SetActiveTab(Tab aTab)
         {
-            myTabs[myActiveTab].Visibility = Visibility.Collapsed;
-            myTabs[aTab].Visibility = Visibility.Visible;
+            myTabs[myActiveTab].Hide();
+            myTabs[aTab].Show();
 
             myActiveTab = aTab;
         }
@@ -252,6 +290,11 @@ namespace Music_Player
         private void SettingsTab_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             SetActiveTab(Tab.Settings);
+        }
+
+        private void AddPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

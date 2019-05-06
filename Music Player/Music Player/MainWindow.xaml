@@ -15,29 +15,33 @@
             <TextBox VerticalAlignment="Center" Margin="90,12,750,12" Height="26" Foreground="White" Background="#FF20292B"/>
         </Grid>
         <Grid Height ="80" VerticalAlignment="Bottom" Background="#FF3C4345">
-            <TextBlock x:Name="txtCurrentTime" VerticalAlignment="Center" HorizontalAlignment="Left" Text="1:23" Margin="220 40 0 0" Foreground="White"/>
-            <Slider x:Name="sldrTimeline" Width="600" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="260,45,0,0" Height="25" Maximum="100" Thumb.DragCompleted="MyTimeline_DragCompleted" Thumb.DragStarted="MyTimeline_DragStarted"/>
-            <TextBlock x:Name="txtMaxTime" VerticalAlignment="Center" HorizontalAlignment="Left" Text="4:20" Margin="880 40 0 0" Foreground="White"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="11*"/>
+                <ColumnDefinition Width="79*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="txtCurrentTime" VerticalAlignment="Center" HorizontalAlignment="Left" Text="1:23" Margin="88,52,0,12" Foreground="White" Grid.Column="1"/>
+            <Slider x:Name="sldrTimeline" Width="600" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="128,50,0,5" Height="25" Maximum="100" Thumb.DragCompleted="MyTimeline_DragCompleted" Thumb.DragStarted="MyTimeline_DragStarted" Grid.Column="1"/>
+            <TextBlock x:Name="txtMaxTime" VerticalAlignment="Center" HorizontalAlignment="Left" Text="4:20" Margin="748,52,0,12" Foreground="White" Grid.Column="1"/>
 
-            <Slider x:Name="sldrVolume" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="260 0 0 30" Maximum="1" Minimum="0" LargeChange="0.1" SmallChange="0.05" ValueChanged="Volume_Changed"/>
-            <TextBlock Height="20" HorizontalAlignment="Left" Text="Currently Playing: " Margin="490,0,0,30" Foreground="#FF20292B"/>
-            <TextBlock x:Name="txtSongTitle" Height="20" HorizontalAlignment="Left" Text="Yikes - Yikesmeistro " Margin="590,0,0,30" Foreground="White" FontStyle="Normal"/>
-            <materialDesign:PackIcon Kind="VolumeHigh" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" Width="20" Margin="460 0 0 30" Foreground="#FF20292B"/>
-            <materialDesign:PackIcon Kind="VolumeLow" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" Width="20" Margin="240 0 0 30" Foreground="#FF20292B"/>
+            <Slider x:Name="sldrVolume" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="128,16,0,46" Maximum="1" Minimum="0" Value="0.5" LargeChange="0.1" SmallChange="0.05" ValueChanged="Volume_Changed" Grid.Column="1"/>
+            <TextBlock Height="20" HorizontalAlignment="Left" Text="Currently Playing: " Margin="358,15,0,45" Foreground="#FF20292B" Grid.Column="1"/>
+            <TextBlock x:Name="txtSongTitle" Height="20" HorizontalAlignment="Left" Text="Yikes - Yikesmeistro " Margin="458,15,0,45" Foreground="White" FontStyle="Normal" Grid.Column="1"/>
+            <materialDesign:PackIcon Kind="VolumeHigh" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" Width="20" Margin="328,15,0,45" Foreground="#FF20292B" Grid.Column="1"/>
+            <materialDesign:PackIcon Kind="VolumeLow" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" Width="20" Margin="108,15,0,45" Foreground="#FF20292B" Grid.Column="1"/>
 
-            <Button x:Name ="btnPlay"  Width="50" Height="50" VerticalAlignment="Center" Margin="900 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C" Click="ButtonPlay_Click">
+            <Button x:Name ="btnPlay"  Width="50" Height="50" VerticalAlignment="Center" Margin="833,15,65,15" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C" Click="ButtonPlay_Click" Grid.Column="1">
                 <materialDesign:PackIcon Kind="Play" Width="30" Height="30" HorizontalAlignment="Center"/>
             </Button>
 
-            <Button x:Name="btnPause" Width="50" Height="50" VerticalAlignment="Center" Margin="900 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C" Click="ButtonPause_Click" Visibility="Collapsed">
+            <Button x:Name="btnPause" Width="50" Height="50" VerticalAlignment="Center" Margin="833,15,65,15" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C" Click="ButtonPause_Click" Visibility="Collapsed" Grid.Column="1">
                 <materialDesign:PackIcon Kind="Pause" Width="30" Height="30" HorizontalAlignment="Center"/>
             </Button>
 
-            <Button Width="50" Height="50" VerticalAlignment="Center" Margin="800 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C" Click="ButtonPrevious_Click">
+            <Button Width="50" Height="50" VerticalAlignment="Center" Margin="783,15,115,15" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C" Click="ButtonPrevious_Click" Grid.Column="1">
                 <materialDesign:PackIcon Kind="SkipPrevious" Width="30" Height="30" HorizontalAlignment="Center"/>
             </Button>
 
-            <Button Width="50" Height="50" VerticalAlignment="Center" Margin="1000 0 0 0" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C" Click="ButtonNext_Click">
+            <Button Width="50" Height="50" VerticalAlignment="Center" Margin="883,15,15,15" Background="Transparent" Foreground="White" BorderThickness="0" OpacityMask="#FF0F0C0C" Click="ButtonNext_Click" Grid.Column="1">
                 <materialDesign:PackIcon Kind="SkipNext" Width="30" Height="30" HorizontalAlignment="Center"/>
             </Button>
 
@@ -46,7 +50,7 @@
         <Grid x:Name="GridMenu" Width="200" HorizontalAlignment="Left" Background="#FF20292B" Margin="0 50 0 0">
             <StackPanel>
                 <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="White">
-                    
+
                     <ListViewItem x:Name="tabAllSongs" Height="60" PreviewMouseDown="AllSongsTab_Click">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Music" Width="25" Height="25" VerticalAlignment="Center" Margin="10"/>
@@ -92,13 +96,14 @@
                 </ListView>
             </StackPanel>
         </Grid>
-        <Button Content="Add local songs" HorizontalAlignment="Left" VerticalAlignment="Top" Width="185" Margin="10,482,0,0" Height="108" Click="SelectSong_Click"/>
+        <Button x:Name="btnAddSongsLocal" Content="Add local songs" HorizontalAlignment="Left" VerticalAlignment="Top" Width="185" Margin="10,482,0,0" Height="108" Click="SelectSong_Click"/>
+        <Button x:Name="btnAddPlaylist" Content="Add local songs" HorizontalAlignment="Left" VerticalAlignment="Top" Width="185" Margin="10,482,0,0" Height="108" Click="AddPlaylist_Click" Visibility="Collapsed"/>
 
         <Grid x:Name="AllSongsGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="880" Height="470" Margin="200,50,0,0" Background="Gray" Visibility="Collapsed">
             <TextBlock Text="All Songs Tab - Not implemeneted!" Foreground="White" FontSize="22" FontWeight="bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
 
-        <Grid x:Name="YoutubeGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="880" Height="470" Margin="200,50,0,0" Background="Gray" Visibility="Visible">
+        <Grid x:Name="YoutubeGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="880" Height="470" Margin="200,50,0,0" Background="Gray" Visibility="Collapsed">
             <TextBlock Text="Youtube Tab - Not implemeneted!" Foreground="White" FontSize="22" FontWeight="bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
 

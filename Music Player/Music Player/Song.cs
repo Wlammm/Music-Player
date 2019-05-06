@@ -5,24 +5,26 @@ using System.Windows.Media;
 
 namespace Music_Player
 {
+    [Serializable]
     public class Song
     {
-        private string myName = "";
-        public string GetName
+        public string GetName { get; set; }
+        public string GetSongPath { get; set; }
+
+        public Song()
         {
-            get { return myName; }
+            // Run it down mid.
         }
 
-        private Uri myUri;
-        public Uri GetUri
+        public Song(string somePath)
         {
-            get { return myUri; }
+            GetSongPath = somePath;
+            GetName = Path.GetFileNameWithoutExtension(somePath);
         }
 
-        public Song(string aFilePath)
+        public Uri GetUri()
         {
-            myUri = new Uri(aFilePath);
-            myName = Path.GetFileNameWithoutExtension(aFilePath);
+            return new Uri(GetSongPath);
         }
     }
 }
