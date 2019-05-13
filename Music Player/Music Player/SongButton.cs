@@ -19,19 +19,26 @@ namespace Music_Player
             get { return myButton; }
         }
 
-        public SongButton(Song aSong, StackPanel aPanel, MainWindow aMainWindow)
+        private SongButton(Song aSong, StackPanel aPanel, MainWindow aMainWindow)
         {
             mySong = aSong;
             myMainWindow = aMainWindow;
+        }
 
-            Button tempButton               = new Button();
-            tempButton.Width                = 880;
-            tempButton.Height               = 25;
-            tempButton.Content              = aSong.GetName;
-            tempButton.VerticalAlignment    = VerticalAlignment.Top;
+        public static SongButton Create(Song aSong, StackPanel aPanel, MainWindow aMainWindow)
+        {
+            SongButton songButton = new SongButton(aSong, aPanel, aMainWindow);
+
+            Button tempButton = new Button();
+            tempButton.Width = 880;
+            tempButton.Height = 25;
+            tempButton.Content = aSong.GetName;
+            tempButton.VerticalAlignment = VerticalAlignment.Top;
 
             aPanel.Children.Add(tempButton);
-            tempButton.Click += SongClicked;
+            tempButton.Click += songButton.SongClicked;
+
+            return songButton;
         }
 
         private void SongClicked(object sender, RoutedEventArgs e)

@@ -67,10 +67,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GUIHandler.cs" />
+    <Compile Include="MainWindow1.cs" />
     <Compile Include="Playlist.cs" />
+    <Compile Include="PlaylistButton.cs" />
     <Compile Include="Song.cs" />
     <Compile Include="SongButton.cs" />
-    <Compile Include="TabPanel.cs" />
+    <Compile Include="GUIElement.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

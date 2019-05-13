@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Windows.Controls;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -21,18 +21,29 @@ namespace Music_Player
 
         public string GetName { get; }
         private string mySavePath;
+        private StackPanel mySongPanel;
+        private StackPanel myPlaylistPanel;
+        private MainWindow myMainWindow;
 
-        public Playlist(string aName, string aSavePath)
+        public Playlist(string aName, string aSavePath, StackPanel aSongPanel, StackPanel aPlaylistPanel, MainWindow someMainWindow, GUIHandler aHandler)
         {
             GetName = aName;
             mySavePath = aSavePath;
+            mySongPanel = aSongPanel;
+            myPlaylistPanel = aPlaylistPanel;
+            myMainWindow = someMainWindow;
 
             mySongs = new List<Song>();
 
             // Playlist already exists.
-            if(File.Exists(aSavePath + "/" + aName + ".json"))
+            if(File.Exists(aSavePath + "/" + aName + ".xml"))
             {
-                //ReadPlaylistFile();
+                ReadPlaylistFile();
+            }
+
+            if(aName != "Local")
+            {
+                PlaylistButton.Create(this, aPlaylistPanel, someMainWindow, aHandler);
             }
         }
 
@@ -53,22 +64,36 @@ namespace Music_Player
             return mySongs[currentSongIndex + 1];
         }
 
+        public void ShowPlaylist()
+        {
+            mySongPanel.Children.Clear();
+
+            foreach(Song song in mySongs)
+            {
+                SongButton.Create(song, mySongPanel, myMainWindow);
+            }
+        }
+
         public void ReadPlaylistFile()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(List<Song>));
 
+            List<Song> songsToAdd = new List<Song>();
+
             using (TextReader reader = new StreamReader(mySavePath + "/" + GetName + ".xml"))
             {
-                mySongs = (List<Song>)serializer.Deserialize(reader);
+                songsToAdd = (List<Song>)serializer.Deserialize(reader);
             }
 
-            Debug.Print("");
+            AddSongs(songsToAdd);
+
+            ShowPlaylist();
         }
 
         public void SavePlaylist()
         {
-            if (mySongs.Count == 0)
-                return;
+            /*if (mySongs.Count == 0)
+                return;*/
 
             XmlSerializer serializer = new XmlSerializer(typeof(List<Song>));
 

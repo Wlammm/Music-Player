@@ -1,14 +1,13 @@
-﻿using Microsoft.Win32;
+﻿using DiscordRPC;
+using Microsoft.Win32;
 using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
-using System.Windows.Controls.Primitives;
-using System.IO;
-using DiscordRPC;
-using System.Collections.Generic;
 
 namespace Music_Player
 {
@@ -30,22 +29,25 @@ namespace Music_Player
 
         Song currentSong;
         TimeSpan currentSongDuration;
-        Playlist myPlaylist;
+
+        // Value 0 är alltid local. 
+        List<Playlist> myPlaylists = new List<Playlist>();
+        Playlist myActivePlaylist;
 
         DiscordRpcClient client;
 
-        private enum Tab { AllSongs, Youtube, Local, Downloads, Playlists, Settings };
-        private Tab myActiveTab = Tab.AllSongs;
-        private Dictionary<Tab, TabPanel> myTabs;
+        private GUIHandler myGUIHandler;
 
         public MainWindow()
-        {
+        { 
             InitializeComponent();
 
             // Discord initialization.
             client = new DiscordRpcClient("573842291517685821");
             client.Initialize();
             DiscordRPC();
+
+            myGUIHandler = new GUIHandler(this);
 
             // Getting file paths.
             string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -64,7 +66,7 @@ namespace Music_Player
                 Directory.CreateDirectory(myPlaylistsFolder);
             }
 
-            myPlaylist = new Playlist("TestPlaylist", myPlaylistsFolder);
+            myPlaylists.Add(new Playlist("Local", myPlaylistsFolder, pnlLocalSongs, pnlPlaylists, this, myGUIHandler));
 
             // Adding timeline timer.
             DispatcherTimer timer = new DispatcherTimer();
@@ -75,54 +77,11 @@ namespace Music_Player
             // Subscribing to event.
             mediaPlayer.MediaOpened += MediaOpened;
 
-            myTabs = new Dictionary<Tab, TabPanel>
-            {
-                {Tab.AllSongs, new TabPanel(AllSongsGrid) },
-                {Tab.Youtube, new TabPanel(YoutubeGrid) },
-                {Tab.Local, new TabPanel(LocalGrid, btnAddSongsLocal) },
-                {Tab.Downloads, new TabPanel(DownloadsGrid) },
-                {Tab.Playlists, new TabPanel(PlaylistsGrid) },
-                {Tab.Settings, new TabPanel(SettingsGrid) }
-            };
+            LoadPlaylists();
 
-            GetLocalSongs();
+            myActivePlaylist = myPlaylists[0];
         }
-
-        /// <summary>
-        /// Loads all local songs from folder.
-        /// </summary>
-        private void GetLocalSongs()
-        {
-            string[] filePaths = Directory.GetFiles(myLocalFolder);
-
-            for(int i = 0; i < filePaths.Length; i++)
-            {
-                new SongButton(new Song(filePaths[i]), pnlSongList, this);
-            }
-        }
-
-        public void PlaySong(Song aSong)
-        {
-            currentSong = aSong;
-            mediaPlayer.Open(aSong.GetUri());
-        }
-
-        void SetPaused(bool pause)
-        {
-            isPaused = pause;
-
-            if (pause)
-            {
-                mediaPlayer.Pause();
-                btnPause.Visibility = Visibility.Collapsed;
-                btnPlay.Visibility = Visibility.Visible;
-                return;
-            }
-
-            mediaPlayer.Play();
-            btnPause.Visibility = Visibility.Visible;
-            btnPlay.Visibility = Visibility.Collapsed;
-        }
+        
 
         private void MediaOpened(object sender, EventArgs e)
         {
@@ -142,21 +101,7 @@ namespace Music_Player
             SetPaused(false);
             mediaPlayer.Play();
         }
-
-        void DiscordRPC()
-        {
-            client.SetPresence(new RichPresence()
-            {
-                Details = currentSong == null ? "Paused." : "Playing: " + currentSong.GetName,
-                State = mediaPlayer.Position.ToString(@"mm\:ss") + "/" + currentSongDuration.ToString(@"mm\:ss"),
-                Assets = new Assets()
-                {
-                    LargeImageKey = "image_large",
-                    LargeImageText = "Lachee's Discord IPC Library",
-                    SmallImageKey = "image_small"
-                }
-            });
-        }
+        
 
         private void ButtonPrevious_Click(object sender, RoutedEventArgs e)
         {
@@ -179,49 +124,6 @@ namespace Music_Player
                 {
                     // Updating timeline if user is not changing.
                     sldrTimeline.Value = (int)mediaPlayer.Position.TotalSeconds;
-                }
-            }
-        }
-
-        private void SelectSong_Click(object sender, RoutedEventArgs e)
-        {
-            ImportFiles();
-        }
-
-        /// <summary>
-        /// Opens a FileDialog and imports songs to music player.
-        /// </summary>
-        void ImportFiles()
-        {
-            OpenFileDialog tempFileDialog = new OpenFileDialog();
-            tempFileDialog.Filter = "MP3 files (*.mp3)|*.mp3| All files (*.*)|*.*";
-            tempFileDialog.Multiselect = true;
-
-            if (tempFileDialog.ShowDialog() == true)
-            {
-                // Copying selected files to local folder (%appdata%/.MusicPlayer/Music/Local)
-                for (int i = 0; i < tempFileDialog.FileNames.Length; i++)
-                {
-                    MediaPlayer tempMediaPlayer = new MediaPlayer();
-                    tempMediaPlayer.Open(new Uri(tempFileDialog.FileNames[i]));
-
-                    string tempSourceFilePath = tempFileDialog.FileNames[i];
-                    string tempNewFilePath = myLocalFolder + System.IO.Path.GetFileName(tempSourceFilePath);
-
-
-                    List<Song> songsAdded = new List<Song>();
-
-                    if (!File.Exists(tempNewFilePath))
-                    {
-                        File.Copy(tempSourceFilePath, tempNewFilePath, false);
-                        Song song = new Song(tempNewFilePath);
-                        SongButton b = new SongButton(song, pnlSongList, this);
-                        songsAdded.Add(song);
-                    }
-
-                    myPlaylist.AddSongs(songsAdded);
-                    
-                    myPlaylist.ReadPlaylistFile();
                 }
             }
         }
@@ -253,46 +155,71 @@ namespace Music_Player
             timelineIsChanging = true;
         }
 
-
-        private void SetActiveTab(Tab aTab)
-        {
-            myTabs[myActiveTab].Hide();
-            myTabs[aTab].Show();
-
-            myActiveTab = aTab;
-        }
-
         private void AllSongsTab_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            SetActiveTab(Tab.AllSongs);
+            myGUIHandler.SwapTab(GUIHandler.GUITab.AllSong);
         }
 
         private void YoutubeTab_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            SetActiveTab(Tab.Youtube);
+            myGUIHandler.SwapTab(GUIHandler.GUITab.Youtube);
         }
 
         private void LocalTab_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            SetActiveTab(Tab.Local);
+            myGUIHandler.SwapTab(GUIHandler.GUITab.Local);
         }
 
         private void DownloadsTab_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            SetActiveTab(Tab.Downloads);
+            myGUIHandler.SwapTab(GUIHandler.GUITab.Download);
         }
 
         private void PlaylistTab_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            SetActiveTab(Tab.Playlists);
+            myGUIHandler.SwapTab(GUIHandler.GUITab.Playlist);
         }
 
         private void SettingsTab_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            SetActiveTab(Tab.Settings);
+            myGUIHandler.SwapTab(GUIHandler.GUITab.Setting);
         }
 
         private void AddPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            txtPlaylistName.Text = "";
+            myGUIHandler.ShowElement(GUIHandler.GUITab.PlaylistName);
+        }
+
+        private void ExitApplication_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private void CreatePlaylistName_Click(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(myPlaylistsFolder + "/" + txtPlaylistName.Text + ".xml"))
+                return;
+
+            myGUIHandler.HideElement(GUIHandler.GUITab.PlaylistName);
+
+            Playlist list = new Playlist(txtPlaylistName.Text, myPlaylistsFolder, pnlPlaylistsSongs, pnlPlaylists, this, myGUIHandler);
+            myPlaylists.Add(list);
+
+            list.SavePlaylist();
+        }
+
+        private void FadeBackground_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            myGUIHandler.HideElement(GUIHandler.GUITab.PlaylistName);
+        }
+
+        private void AddLocalSong_Click(object sender, RoutedEventArgs e)
+        {
+            ImportFiles();
+        }
+
+        private void Application_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
 
         }

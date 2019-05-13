@@ -7,13 +7,25 @@ using System.Windows;
 
 namespace Music_Player
 {
-    class TabPanel
+    class GUIElement
     {
         FrameworkElement[] myElements;
 
-        public TabPanel(params FrameworkElement[] someElements)
+        public GUIElement(params FrameworkElement[] someElements)
         {
             myElements = someElements;
+        }
+
+        public bool IsVisible()
+        {
+            foreach(FrameworkElement E in myElements)
+            {
+                if(E.Visibility != Visibility.Visible)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void Hide()

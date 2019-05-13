@@ -6,11 +6,13 @@
         xmlns:local="clr-namespace:Music_Player"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Music Player" Height="600" Width="1080" ResizeMode="NoResize" WindowStyle="None">
+        Title="Music Player" Height="600" Width="1080" ResizeMode="NoResize" WindowStyle="None"
+        Closing="Application_Closing">
 
-    <Grid Background="LightGray">
+    <Grid x:Name="MainGrid"  Background="LightGray">
 
         <Grid Height= "50" VerticalAlignment="Top" Background="#FF3C4345">
+            <materialDesign:PackIcon Kind="Xamarin" Height="32" Width="32" Margin="1038,8,0,0" Foreground="DarkRed" MouseDown="ExitApplication_Click"/>
             <TextBlock Text="Search:" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18" Foreground="#FFFF" Margin="20 0"/>
             <TextBox VerticalAlignment="Center" Margin="90,12,750,12" Height="26" Foreground="White" Background="#FF20292B"/>
         </Grid>
@@ -96,8 +98,9 @@
                 </ListView>
             </StackPanel>
         </Grid>
-        <Button x:Name="btnAddSongsLocal" Content="Add local songs" HorizontalAlignment="Left" VerticalAlignment="Top" Width="185" Margin="10,482,0,0" Height="108" Click="SelectSong_Click"/>
-        <Button x:Name="btnAddPlaylist" Content="Add local songs" HorizontalAlignment="Left" VerticalAlignment="Top" Width="185" Margin="10,482,0,0" Height="108" Click="AddPlaylist_Click" Visibility="Collapsed"/>
+
+        <Button x:Name="btnAddSongsLocal" Content="Add local songs" HorizontalAlignment="Left" VerticalAlignment="Top" Width="185" Margin="10,482,0,0" Height="108" Click="AddLocalSong_Click" Visibility="Collapsed"/>
+        <Button x:Name="btnAddPlaylist" Content="Add playlist" HorizontalAlignment="Left" VerticalAlignment="Top" Width="185" Margin="10,482,0,0" Height="108" Click="AddPlaylist_Click" Visibility="Collapsed"/>
 
         <Grid x:Name="AllSongsGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="880" Height="470" Margin="200,50,0,0" Background="Gray" Visibility="Collapsed">
             <TextBlock Text="All Songs Tab - Not implemeneted!" Foreground="White" FontSize="22" FontWeight="bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -108,8 +111,14 @@
         </Grid>
 
         <Grid x:Name="LocalGrid" Height="470" Margin="200,50,0,0" VerticalAlignment="Top" Width="880" Background="Gray" Visibility="Collapsed">
+            <StackPanel x:Name="pnlLocalSongs" VerticalAlignment="Top">
 
-            <StackPanel x:Name="pnlSongList" VerticalAlignment="Top">
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="PlaylistShowSongs" Height="472" Margin="200,50,0,0" VerticalAlignment="Top" Width="880" Background="Gray" Visibility="Collapsed">
+            <TextBlock Text="Playlist actives!"/>
+            <StackPanel x:Name="pnlPlaylistsSongs" VerticalAlignment="Top">
 
             </StackPanel>
         </Grid>
@@ -119,13 +128,24 @@
         </Grid>
 
         <Grid x:Name="PlaylistsGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="880" Height="470" Margin="200,50,0,0" Background="Gray" Visibility="Collapsed">
-            <TextBlock Text="Playlists Tab - Not implemeneted!" Foreground="White" FontSize="22" FontWeight="bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <StackPanel x:Name="pnlPlaylists" VerticalAlignment="Top">
+
+            </StackPanel>
         </Grid>
 
         <Grid x:Name="SettingsGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="880" Height="470" Margin="200,50,0,0" Background="Gray" Visibility="Collapsed">
             <TextBlock Text="Settings Tab - Not implemeneted!" Foreground="White" FontSize="22" FontWeight="bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
 
+        <Grid x:Name="FadeBackground" Height="600" Width="1080" Background="#4C000000" Visibility="Hidden" IsHitTestVisible="True" MouseDown="FadeBackground_Click"/>
 
+        <Grid x:Name="PlaylistNameMenu" Height="130" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 0 0" Background="#FF3C4345" Visibility="Collapsed">
+
+            <TextBlock Text="Add playlist" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 0 80" Foreground="White"/>
+            <TextBox x:Name="txtPlaylistName" VerticalAlignment="Center" HorizontalAlignment="Center" Height="20" Width="200" Background="#FF666565" Margin="0 0 0 10" FontSize="10" Foreground="White"/>
+            <Button x:Name="btnPlaylistCreate" Height="25" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 70 0 0" Click="CreatePlaylistName_Click">
+                <TextBlock Text="Create" FontSize="12"/>
+            </Button>
+        </Grid>
     </Grid>
 </Window>
