@@ -71,6 +71,7 @@
     <Compile Include="MainWindow1.cs" />
     <Compile Include="Playlist.cs" />
     <Compile Include="PlaylistButton.cs" />
+    <Compile Include="PlaylistListButton.cs" />
     <Compile Include="Song.cs" />
     <Compile Include="SongButton.cs" />
     <Compile Include="GUIElement.cs" />

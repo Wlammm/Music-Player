@@ -13,10 +13,23 @@ namespace Music_Player
 {
     public partial class MainWindow : Window
     {
+        private static Song mySelctedSong;
+        public static Song AccessSelectedSong
+        {
+            get { return mySelctedSong; }
+            set { mySelctedSong = value; }
+        }
+
         public void PlaySong(Song aSong)
         {
             currentSong = aSong;
             mediaPlayer.Open(aSong.GetUri());
+        }
+
+        void BackgroundClick()
+        {
+            myGUIHandler.HideElement(GUIHandler.GUITab.PlaylistsList);
+            myGUIHandler.HideElement(GUIHandler.GUITab.PlaylistName);
         }
 
         void SetPaused(bool pause)
@@ -80,17 +93,18 @@ namespace Music_Player
                     }
 
                     myPlaylists[0].AddSongs(songsAdded);
+                    myPlaylists[0].ShowPlaylist();
                 }
             }
         }
-
+        
         private void LoadPlaylists()
         {
             string[] playlistPaths = Directory.GetFiles(myPlaylistsFolder);
 
             for (int i = 0; i < playlistPaths.Length; i++)
             {
-                myPlaylists.Add(new Playlist(Path.GetFileNameWithoutExtension(playlistPaths[i]), myPlaylistsFolder, pnlPlaylistsSongs, pnlPlaylists, this, myGUIHandler));
+                myPlaylists.Add(new Playlist(Path.GetFileNameWithoutExtension(playlistPaths[i]), myPlaylistsFolder, pnlPlaylistsSongs, pnlPlaylists, listPlaylistsStack, this, myGUIHandler));
             }
         }
     }

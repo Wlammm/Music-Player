@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -24,15 +25,16 @@ namespace Music_Player
         private StackPanel mySongPanel;
         private StackPanel myPlaylistPanel;
         private MainWindow myMainWindow;
+        private GUIHandler myGUIHander;
 
-        public Playlist(string aName, string aSavePath, StackPanel aSongPanel, StackPanel aPlaylistPanel, MainWindow someMainWindow, GUIHandler aHandler)
+        public Playlist(string aName, string aSavePath, StackPanel aSongPanel, StackPanel aPlaylistPanel, StackPanel aPlaylistPickPanel,  MainWindow someMainWindow, GUIHandler aHandler)
         {
             GetName = aName;
             mySavePath = aSavePath;
             mySongPanel = aSongPanel;
             myPlaylistPanel = aPlaylistPanel;
             myMainWindow = someMainWindow;
-
+            myGUIHander = aHandler;
             mySongs = new List<Song>();
 
             // Playlist already exists.
@@ -44,7 +46,24 @@ namespace Music_Player
             if(aName != "Local")
             {
                 PlaylistButton.Create(this, aPlaylistPanel, someMainWindow, aHandler);
+                Button tempButton = new Button();
+                tempButton.Click += PlaylistPick_Click;
+                tempButton.Content = aName;
+                
+                aPlaylistPickPanel.Children.Add(tempButton);
             }
+        }
+
+        private void PlaylistPick_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            AddSong(MainWindow.AccessSelectedSong);
+        }
+
+        public void AddSong(Song aSong)
+        {
+            mySongs.Add(aSong);
+
+            SavePlaylist();
         }
 
         public void AddSongs(IEnumerable<Song> someSongsToAdd)
@@ -70,7 +89,7 @@ namespace Music_Player
 
             foreach(Song song in mySongs)
             {
-                SongButton.Create(song, mySongPanel, myMainWindow);
+                SongButton.Create(song, mySongPanel, myMainWindow, myGUIHander);
             }
         }
 

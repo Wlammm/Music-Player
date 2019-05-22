@@ -9,7 +9,7 @@ namespace Music_Player
 {
     class GUIHandler
     {
-        public enum GUITab { AllSong, Youtube, Local, Download, Playlist, Setting, PlaylistName, PlaylistShowSongs }
+        public enum GUITab { AllSong, Youtube, Local, Download, Playlist, Setting, PlaylistName, PlaylistShowSongs, PlaylistsList }
         private GUITab activeTab = GUITab.AllSong;
 
         private Dictionary<GUITab, GUIElement> myTabs;
@@ -29,7 +29,8 @@ namespace Music_Player
                 {GUITab.Playlist, new GUIElement(myMainWindow.PlaylistsGrid, myMainWindow.btnAddPlaylist) },
                 {GUITab.Setting, new GUIElement(myMainWindow.SettingsGrid) },
                 {GUITab.PlaylistName, new GUIElement(myMainWindow.PlaylistNameMenu, myMainWindow.FadeBackground) },
-                {GUITab.PlaylistShowSongs, new GUIElement(myMainWindow.PlaylistShowSongs) }
+                {GUITab.PlaylistShowSongs, new GUIElement(myMainWindow.PlaylistShowSongs) },
+                {GUITab.PlaylistsList, new GUIElement(myMainWindow.ListPlaylists, myMainWindow.FadeBackground) }
             };
 
             SwapTab(GUITab.AllSong);

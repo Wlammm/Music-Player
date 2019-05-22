@@ -66,7 +66,7 @@ namespace Music_Player
                 Directory.CreateDirectory(myPlaylistsFolder);
             }
 
-            myPlaylists.Add(new Playlist("Local", myPlaylistsFolder, pnlLocalSongs, pnlPlaylists, this, myGUIHandler));
+            myPlaylists.Add(new Playlist("Local", myPlaylistsFolder, pnlLocalSongs, pnlPlaylists,pnlPlaylists, this, myGUIHandler));
 
             // Adding timeline timer.
             DispatcherTimer timer = new DispatcherTimer();
@@ -203,7 +203,7 @@ namespace Music_Player
 
             myGUIHandler.HideElement(GUIHandler.GUITab.PlaylistName);
 
-            Playlist list = new Playlist(txtPlaylistName.Text, myPlaylistsFolder, pnlPlaylistsSongs, pnlPlaylists, this, myGUIHandler);
+            Playlist list = new Playlist(txtPlaylistName.Text, myPlaylistsFolder, listPlaylistsStack, pnlPlaylists, pnlPlaylists, this, myGUIHandler);
             myPlaylists.Add(list);
 
             list.SavePlaylist();
@@ -211,7 +211,7 @@ namespace Music_Player
 
         private void FadeBackground_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            myGUIHandler.HideElement(GUIHandler.GUITab.PlaylistName);
+            BackgroundClick();
         }
 
         private void AddLocalSong_Click(object sender, RoutedEventArgs e)

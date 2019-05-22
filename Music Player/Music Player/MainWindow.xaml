@@ -137,7 +137,7 @@
             <TextBlock Text="Settings Tab - Not implemeneted!" Foreground="White" FontSize="22" FontWeight="bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
 
-        <Grid x:Name="FadeBackground" Height="600" Width="1080" Background="#4C000000" Visibility="Hidden" IsHitTestVisible="True" MouseDown="FadeBackground_Click"/>
+        <Grid x:Name="FadeBackground" Height="600" Width="1080" Background="#4C000000" Visibility="Collapsed" IsHitTestVisible="True" MouseDown="FadeBackground_Click"/>
 
         <Grid x:Name="PlaylistNameMenu" Height="130" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 0 0" Background="#FF3C4345" Visibility="Collapsed">
 
@@ -147,5 +147,15 @@
                 <TextBlock Text="Create" FontSize="12"/>
             </Button>
         </Grid>
+
+        <Grid x:Name="ListPlaylists" Height="250" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 0 0" Background="#FF3C4345" Visibility="Collapsed">
+            <TextBlock Text="Choose Playlist" HorizontalAlignment="Center" Foreground="White" Margin="0 5 0 0 " ScrollViewer.CanContentScroll="False"/>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="listPlaylistsStack" Margin="0 30 0 0">
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
     </Grid>
 </Window>
