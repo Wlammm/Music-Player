@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Windows.Controls;
 
 namespace Music_Player
 {
@@ -105,12 +106,12 @@ namespace Music_Player
 
         private void ButtonPrevious_Click(object sender, RoutedEventArgs e)
         {
-
+            PlaySong(myActivePlaylist.PreviousSong(currentSong), myActivePlaylist);
         }
 
         private void ButtonNext_Click(object sender, RoutedEventArgs e)
         {
-
+            PlaySong(myActivePlaylist.NextSong(currentSong), myActivePlaylist);
         }
 
         void Timer_Tick(object sender, EventArgs e)
@@ -203,7 +204,7 @@ namespace Music_Player
 
             myGUIHandler.HideElement(GUIHandler.GUITab.PlaylistName);
 
-            Playlist list = new Playlist(txtPlaylistName.Text, myPlaylistsFolder, listPlaylistsStack, pnlPlaylists, pnlPlaylists, this, myGUIHandler);
+            Playlist list = new Playlist(txtPlaylistName.Text, myPlaylistsFolder, pnlPlaylistsSongs, pnlPlaylists, listPlaylistsStack, this, myGUIHandler);
             myPlaylists.Add(list);
 
             list.SavePlaylist();

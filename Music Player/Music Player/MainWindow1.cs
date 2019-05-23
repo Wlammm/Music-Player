@@ -11,7 +11,7 @@ using System.Windows.Media;
 
 namespace Music_Player
 {
-    public partial class MainWindow : Window
+    partial class MainWindow : Window
     {
         private static Song mySelctedSong;
         public static Song AccessSelectedSong
@@ -20,9 +20,11 @@ namespace Music_Player
             set { mySelctedSong = value; }
         }
 
-        public void PlaySong(Song aSong)
+
+        public void PlaySong(Song aSong, Playlist aPlaylist)
         {
             currentSong = aSong;
+            myActivePlaylist = aPlaylist;
             mediaPlayer.Open(aSong.GetUri());
         }
 

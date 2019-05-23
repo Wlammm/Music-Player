@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace Music_Player
 {
-    class GUIHandler
+    public class GUIHandler
     {
         public enum GUITab { AllSong, Youtube, Local, Download, Playlist, Setting, PlaylistName, PlaylistShowSongs, PlaylistsList }
         private GUITab activeTab = GUITab.AllSong;

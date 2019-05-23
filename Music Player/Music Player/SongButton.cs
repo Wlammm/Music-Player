@@ -14,6 +14,7 @@ namespace Music_Player
         private Song mySong;
         private MainWindow myMainWindow;
         private GUIHandler myGUIHandler;
+        private Playlist myPlaylist;
 
         private Button myButton;
         public Button GetButton
@@ -21,23 +22,24 @@ namespace Music_Player
             get { return myButton; }
         }
 
-        private SongButton(Song aSong, StackPanel aPanel, MainWindow aMainWindow, GUIHandler aHandler)
+        private SongButton(Song aSong, StackPanel aPanel, MainWindow aMainWindow, GUIHandler aHandler, Playlist aPlaylist)
         {
             mySong = aSong;
+            myPlaylist = aPlaylist;
             myGUIHandler = aHandler;
             myMainWindow = aMainWindow;
         }
 
-        public static SongButton Create(Song aSong, StackPanel aPanel, MainWindow aMainWindow, GUIHandler aHandler)
+        public static SongButton Create(Song aSong, StackPanel aPanel, MainWindow aMainWindow, GUIHandler aHandler, Playlist aPlaylist)
         {
-            SongButton songButton = new SongButton(aSong, aPanel, aMainWindow, aHandler);
+            SongButton songButton = new SongButton(aSong, aPanel, aMainWindow, aHandler, aPlaylist);
 
             Button tempButton = new Button();
             tempButton.Width = 880;
             tempButton.Height = 25;
             tempButton.Content = aSong.GetName;
             tempButton.VerticalAlignment = VerticalAlignment.Top;
-            //fkdsk
+
             ContextMenu menu = new ContextMenu();
             MenuItem items = new MenuItem();
 
@@ -60,7 +62,7 @@ namespace Music_Player
 
         private void SongClicked(object sender, RoutedEventArgs e)
         {
-            myMainWindow.PlaySong(mySong);
+            myMainWindow.PlaySong(mySong, myPlaylist);
         }
     }
 }

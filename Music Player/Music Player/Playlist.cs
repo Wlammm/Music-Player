@@ -12,7 +12,7 @@ using System.Xml.Serialization;
 
 namespace Music_Player
 {
-    class Playlist
+    public class Playlist
     {
         private List<Song> mySongs;
         public List<Song> GetSongs
@@ -56,6 +56,7 @@ namespace Music_Player
 
         private void PlaylistPick_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            myGUIHander.HideElement(GUIHandler.GUITab.PlaylistsList);
             AddSong(MainWindow.AccessSelectedSong);
         }
 
@@ -83,13 +84,23 @@ namespace Music_Player
             return mySongs[currentSongIndex + 1];
         }
 
+        public Song PreviousSong(Song someCurrentSong)
+        {
+            int currentSongIndex = mySongs.IndexOf(someCurrentSong);
+
+            if (currentSongIndex == 0)
+                return mySongs[mySongs.Count - 1];
+
+            return mySongs[currentSongIndex - 1];
+        }
+
         public void ShowPlaylist()
         {
             mySongPanel.Children.Clear();
 
             foreach(Song song in mySongs)
             {
-                SongButton.Create(song, mySongPanel, myMainWindow, myGUIHander);
+                SongButton.Create(song, mySongPanel, myMainWindow, myGUIHander, this);
             }
         }
 
@@ -111,9 +122,6 @@ namespace Music_Player
 
         public void SavePlaylist()
         {
-            /*if (mySongs.Count == 0)
-                return;*/
-
             XmlSerializer serializer = new XmlSerializer(typeof(List<Song>));
 
             using (TextWriter writer = new StreamWriter(mySavePath + "/" + GetName + ".xml"))
