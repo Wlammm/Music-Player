@@ -21,12 +21,25 @@ namespace Music_Player
             myButton.Click += ShowPlaylist;
         }
 
+        /// <summary>
+        /// Shows the playlist.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ShowPlaylist(object sender, RoutedEventArgs e)
         {
             myHandler.SwapTab(GUIHandler.GUITab.PlaylistShowSongs);
             myPlaylist.ShowPlaylist();
         }
 
+        /// <summary>
+        /// Creates a button for a playlist.
+        /// </summary>
+        /// <param name="aPlaylist"></param>
+        /// <param name="aPanel"></param>
+        /// <param name="aMainWindow"></param>
+        /// <param name="aHandler"></param>
+        /// <returns></returns>
         public static PlaylistButton Create(Playlist aPlaylist, StackPanel aPanel, MainWindow aMainWindow, GUIHandler aHandler)
         {
             Button tempButton = new Button();

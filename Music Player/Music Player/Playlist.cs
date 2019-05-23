@@ -54,12 +54,22 @@ namespace Music_Player
             }
         }
 
+        /// <summary>
+        /// Called when playlist button is clicked from playlist popup.
+        /// Adds song to playlist.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PlaylistPick_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             myGUIHander.HideElement(GUIHandler.GUITab.PlaylistsList);
             AddSong(MainWindow.AccessSelectedSong);
         }
 
+        /// <summary>
+        /// Adds a song to the playlist.
+        /// </summary>
+        /// <param name="aSong"></param>
         public void AddSong(Song aSong)
         {
             mySongs.Add(aSong);
@@ -67,6 +77,10 @@ namespace Music_Player
             SavePlaylist();
         }
 
+        /// <summary>
+        /// Adds multiple songs to the playlist.
+        /// </summary>
+        /// <param name="someSongsToAdd"></param>
         public void AddSongs(IEnumerable<Song> someSongsToAdd)
         {
             mySongs.AddRange(someSongsToAdd);
@@ -74,6 +88,11 @@ namespace Music_Player
             SavePlaylist();
         }
 
+        /// <summary>
+        /// Returns the next song in the playlist.
+        /// </summary>
+        /// <param name="someCurrentSong">Current song playing</param>
+        /// <returns></returns>
         public Song NextSong(Song someCurrentSong)
         {
             int currentSongIndex = mySongs.IndexOf(someCurrentSong);
@@ -84,6 +103,11 @@ namespace Music_Player
             return mySongs[currentSongIndex + 1];
         }
 
+        /// <summary>
+        /// Returns previous song in playlist.
+        /// </summary>
+        /// <param name="someCurrentSong">Current song playing</param>
+        /// <returns></returns>
         public Song PreviousSong(Song someCurrentSong)
         {
             int currentSongIndex = mySongs.IndexOf(someCurrentSong);
@@ -94,6 +118,9 @@ namespace Music_Player
             return mySongs[currentSongIndex - 1];
         }
 
+        /// <summary>
+        /// Shows the playlist and adds song buttons.
+        /// </summary>
         public void ShowPlaylist()
         {
             mySongPanel.Children.Clear();
@@ -104,6 +131,9 @@ namespace Music_Player
             }
         }
 
+        /// <summary>
+        /// Reads songs from the playlist save and adding them to song list.
+        /// </summary>
         public void ReadPlaylistFile()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(List<Song>));
@@ -120,6 +150,9 @@ namespace Music_Player
             ShowPlaylist();
         }
 
+        /// <summary>
+        /// Saves the playlist.
+        /// </summary>
         public void SavePlaylist()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(List<Song>));

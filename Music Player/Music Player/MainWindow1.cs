@@ -34,6 +34,10 @@ namespace Music_Player
             myGUIHandler.HideElement(GUIHandler.GUITab.PlaylistName);
         }
 
+        /// <summary>
+        /// Sets song state to pause or not and changes GUI to selected state. 
+        /// </summary>
+        /// <param name="pause"></param>
         void SetPaused(bool pause)
         {
             isPaused = pause;
@@ -51,11 +55,14 @@ namespace Music_Player
             btnPlay.Visibility = Visibility.Collapsed;
         }
 
+        /// <summary>
+        /// Discord Rich precense.
+        /// </summary>
         void DiscordRPC()
         {
             client.SetPresence(new RichPresence()
             {
-                Details = currentSong == null ? "Paused." : "Playing: " + currentSong.GetName,
+                Details = currentSong == null ? "Paused." : "Playing: " + currentSong.AccessName,
                 State = mediaPlayer.Position.ToString(@"mm\:ss") + "/" + currentSongDuration.ToString(@"mm\:ss"),
                 Assets = new Assets()
                 {
@@ -67,7 +74,8 @@ namespace Music_Player
         }
 
         /// <summary>
-        /// Opens a FileDialog and imports songs to music player.
+        /// Opens a FileDialog and imports songs.
+        /// Adds the songs to %appdata%/.MusicPlayer/Music/Local and to Local playlist. 
         /// </summary>
         void ImportFiles()
         {
@@ -100,6 +108,9 @@ namespace Music_Player
             }
         }
         
+        /// <summary>
+        /// Imports all playlists that are saved. Used when initializing the program. 
+        /// </summary>
         private void LoadPlaylists()
         {
             string[] playlistPaths = Directory.GetFiles(myPlaylistsFolder);

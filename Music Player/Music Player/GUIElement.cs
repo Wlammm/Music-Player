@@ -16,6 +16,10 @@ namespace Music_Player
             myElements = someElements;
         }
 
+        /// <summary>
+        /// Returns if element is visible.
+        /// </summary>
+        /// <returns></returns>
         public bool IsVisible()
         {
             foreach(FrameworkElement E in myElements)
@@ -28,6 +32,9 @@ namespace Music_Player
             return true;
         }
 
+        /// <summary>
+        /// Hides the element.
+        /// </summary>
         public void Hide()
         {
             foreach(FrameworkElement E in myElements)
@@ -36,6 +43,9 @@ namespace Music_Player
             }
         }
 
+        /// <summary>
+        /// Shows the element.
+        /// </summary>
         public void Show()
         {
             foreach(FrameworkElement E in myElements)

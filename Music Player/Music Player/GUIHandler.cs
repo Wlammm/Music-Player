@@ -20,6 +20,7 @@ namespace Music_Player
         {
             myMainWindow = aMainWindow;
 
+            // Add all elements to different GUI categories. 
             myTabs = new Dictionary<GUITab, GUIElement>
             {
                 {GUITab.AllSong, new GUIElement(myMainWindow.AllSongsGrid) },
@@ -36,6 +37,11 @@ namespace Music_Player
             SwapTab(GUITab.AllSong);
         }
 
+        /// <summary>
+        /// Swaps from current GUI element to new element.
+        /// Hiding current active element and showing new.
+        /// </summary>
+        /// <param name="aGUITab">New element to be visible</param>
         public void SwapTab(GUITab aGUITab)
         {
             myTabs[activeTab].Hide();
@@ -44,11 +50,19 @@ namespace Music_Player
             activeTab = aGUITab;
         }
 
+        /// <summary>
+        /// Shows a specific element.
+        /// </summary>
+        /// <param name="aGUIElement"></param>
         public void ShowElement(GUITab aGUIElement)
         {
             myTabs[aGUIElement].Show();
         }
 
+        /// <summary>
+        /// Hides a specific element.
+        /// </summary>
+        /// <param name="aGUIElement"></param>
         public void HideElement(GUITab aGUIElement)
         {
             myTabs[aGUIElement].Hide();
